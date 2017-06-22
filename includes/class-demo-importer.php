@@ -51,6 +51,7 @@ class TG_Demo_Importer {
 		}
 
 		// AJAX Events to import demo and dismiss notice.
+		add_action( 'wp_ajax_tg_query_demos', array( $this, 'query_demo_packages' ) );
 		add_action( 'wp_ajax_import-demo', array( $this, 'ajax_import_demo' ) );
 		add_action( 'wp_ajax_dismiss-notice', array( $this, 'ajax_dismiss_notice' ) );
 
@@ -402,6 +403,13 @@ class TG_Demo_Importer {
 		$prepared_demos = apply_filters( 'themegrill_demo_importer_prepare_demos_for_js', $prepared_demos );
 		$prepared_demos = array_values( $prepared_demos );
 		return array_filter( $prepared_demos );
+	}
+
+	/**
+	 * Ajax handler for getting demos.
+	 */
+	public function query_demo_packages() {
+		wp_send_json_success( $this->prepare_demos_for_js( $this->demo_config ) );
 	}
 
 	/**

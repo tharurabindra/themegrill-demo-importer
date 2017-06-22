@@ -224,7 +224,146 @@ demos.Collection = Backbone.Collection.extend({
 		collection = _( collection.first( 20 ) );
 
 		return collection;
-	}
+	},
+
+	count: false,
+
+	// Handles requests for more demos
+	// and caches results
+	//
+	// When we are missing a cache object we fire an apiCall()
+	// which triggers events of `query:success` or `query:fail`
+	query: function( request ) {
+		/**
+		 * @static
+		 * @type Array
+		 */
+		var queries = this.queries,
+			self = this,
+			query, isPaginated, count;
+
+		// Store current query request args
+		// for later use with the event `demo:end`
+		this.currentQuery.request = request;
+
+		// Search the query cache for matches.
+		query = _.find( queries, function( query ) {
+			return _.isEqual( query.request, request );
+		});
+
+		// If the request matches the stored currentQuery.request
+		// it means we have a paginated request.
+		isPaginated = _.has( request, 'page' );
+
+		// Reset the internal api page counter for non paginated queries.
+		if ( ! isPaginated ) {
+			this.currentQuery.page = 1;
+		}
+
+		// Otherwise, send a new API call and add it to the cache.
+		if ( ! query && ! isPaginated ) {
+			query = this.apiCall( request ).done( function( data ) {
+
+				// Update the collection with the queried data.
+				if ( data.themes ) {
+					self.reset( data.themes );
+					count = data.info.results;
+					// Store the results and the query request
+					queries.push( { themes: data.themes, request: request, total: count } );
+				}
+
+				// Trigger a collection refresh event
+				// and a `query:success` event with a `count` argument.
+				self.trigger( 'demos:update' );
+				self.trigger( 'query:success', count );
+
+				if ( data.themes && data.themes.length === 0 ) {
+					self.trigger( 'query:empty' );
+				}
+
+			}).fail( function() {
+				self.trigger( 'query:fail' );
+			});
+		} else {
+			// If it's a paginated request we need to fetch more themes...
+			if ( isPaginated ) {
+				return this.apiCall( request, isPaginated ).done( function( data ) {
+					// Add the new themes to the current collection
+					// @todo update counter
+					self.add( data.themes );
+					self.trigger( 'query:success' );
+
+					// We are done loading themes for now.
+					self.loadingThemes = false;
+
+				}).fail( function() {
+					self.trigger( 'query:fail' );
+				});
+			}
+
+			if ( query.themes.length === 0 ) {
+				self.trigger( 'query:empty' );
+			} else {
+				$( 'body' ).removeClass( 'no-results' );
+			}
+
+			// Only trigger an update event since we already have the themes
+			// on our cached object
+			if ( _.isNumber( query.total ) ) {
+				this.count = query.total;
+			}
+
+			this.reset( query.themes );
+			if ( ! query.total ) {
+				this.count = this.length;
+			}
+
+			this.trigger( 'demos:update' );
+			this.trigger( 'query:success', this.count );
+		}
+	},
+
+	// Local cache array for API queries
+	queries: [],
+
+	// Keep track of current query so we can handle pagination
+	currentQuery: {
+		page: 1,
+		request: {}
+	},
+
+	// Send request to api.github.org
+	apiCall: function( request, paginated ) {
+		return wp.ajax.send( 'tg_query_demos', {
+			data: {
+				// Request data
+				request: _.extend({
+					per_page: 100,
+					fields: {
+						description: true,
+						tested: true,
+						requires: true,
+						rating: true,
+						downloaded: true,
+						downloadLink: true,
+						last_updated: true,
+						homepage: true,
+						num_ratings: true
+					}
+				}, request )
+			},
+
+			beforeSend: function() {
+				if ( ! paginated ) {
+					// Spin it
+					$( 'body' ).addClass( 'loading-content' ).removeClass( 'no-results' );
+				}
+			}
+		});
+	},
+
+	// Static status controller for when we are loading themes.
+	loadingThemes: false
 });
 
 // This is the view that controls each demo item
@@ -1049,27 +1188,163 @@ demos.Run = {
 	}
 };
 
+// Extend the main Search view
+demos.view.InstallerSearch = demos.view.Search.extend({
+
+	events: {
+		'input': 'search',
+		'keyup': 'search'
+	},
+
+	terms: '',
+
+	// Handles Ajax request for searching through themes in public repo
+	search: function( event ) {
+
+		// Tabbing or reverse tabbing into the search input shouldn't trigger a search
+		if ( event.type === 'keyup' && ( event.which === 9 || event.which === 16 ) ) {
+			return;
+		}
+
+		this.collection = this.options.parent.view.collection;
+
+		// Clear on escape.
+		if ( event.type === 'keyup' && event.which === 27 ) {
+			event.target.value = '';
+		}
+
+		this.doSearch( event.target.value );
+	},
+
+	doSearch: _.debounce( function( value ) {
+		var request = {};
+
+		// Don't do anything if the search terms haven't changed.
+		if ( this.terms === value ) {
+			return;
+		}
+
+		// Updates terms with the value passed.
+		this.terms = value;
+
+		request.search = value;
+
+		// Intercept an [author] search.
+		//
+		// If input value starts with `author:` send a request
+		// for `author` instead of a regular `search`
+		if ( value.substring( 0, 7 ) === 'author:' ) {
+			request.search = '';
+			request.author = value.slice( 7 );
+		}
+
+		// Intercept a [tag] search.
+		//
+		// If input value starts with `tag:` send a request
+		// for `tag` instead of a regular `search`
+		if ( value.substring( 0, 4 ) === 'tag:' ) {
+			request.search = '';
+			request.tag = [ value.slice( 4 ) ];
+		}
+
+		// Get the demos by sending Ajax POST request to api.wordpress.org/themes
+		// or searching the local cache
+		this.collection.query( request );
+
+		// Set route
+		demos.router.navigate( demos.router.baseUrl( demos.router.searchPath + value ), { replace: true } );
+	}, 500 )
+});
+
 demos.view.Installer = demos.view.Appearance.extend({
 
 	el: '#wpbody-content .wrap',
+
+	// Register events for sorting and filters in demo-navigation
+	events: {
+		'click .filter-links li > a': 'onSort'
+	},
 
 	// Initial render method
 	render: function() {
 		this.search();
 		this.uploader();
 
-		// Setup the main demo view
-		// with the current demo collection
+		this.collection = new demos.Collection( demos.data.demos );
+
+		this.listenTo( this.collection, 'query:success', function() {
+			$( 'body' ).removeClass( 'loading-content' );
+			$( '.theme-browser' ).find( 'div.error' ).remove();
+		});
+
+		this.listenTo( this.collection, 'query:fail', function() {
+			$( 'body' ).removeClass( 'loading-content' );
+			$( '.theme-browser' ).find( 'div.error' ).remove();
+			$( '.theme-browser' ).find( 'div.themes' ).before( '<div class="error"><p>' + l10n.error + '</p></div>' );
+		});
+
+		if ( this.view ) {
+			this.view.remove();
+		}
+
+		// Set ups the view and passes the section argument
 		this.view = new demos.view.Demos({
 			collection: this.collection,
 			parent: this
 		});
+
+		// Reset pagination every time the install view handler is run
+		this.page = 0;
 
 		// Render and append
 		this.$el.find( '.themes' ).remove();
 		this.view.render();
 		this.$el.find( '.theme-browser' ).append( this.view.el ).addClass( 'rendered' );
 	},
+
+	// Sorting navigation
+	onSort: function( event ) {
+		var $el = $( event.target ),
+			sort = $el.data( 'sort' );
+
+		event.preventDefault();
+
+		$( 'body' ).removeClass( 'filters-applied show-filters' );
+		$( '.drawer-toggle' ).attr( 'aria-expanded', 'false' );
+
+		// Bail if this is already active
+		if ( $el.hasClass( this.activeClass ) ) {
+			return;
+		}
+
+		this.sort( sort );
+
+		// Trigger a router.naviagte update
+		demos.router.navigate( demos.router.baseUrl( demos.router.browsePath + sort ) );
+	},
+
+	browse: function( section ) {
+		// Create a new collection with the proper theme data
+		// for each section
+		this.collection.query( { browse: section } );
+	},
+
+	sort: function( sort ) {
+		this.clearSearch();
+
+		if ( 'uploads' !== sort ) {
+			this.searchContainer.hide();
+		} else {
+			this.searchContainer.show();
+		}
+
+		$( '.filter-links li > a, .theme-filter' ).removeClass( this.activeClass );
+		$( '[data-sort="' + sort + '"]' ).addClass( this.activeClass );
+
+		this.browse( sort );
+	},
+
+	activeClass: 'current',
 
 	// Overwrite search container class to append search
 	// in new location
@@ -1098,31 +1373,23 @@ demos.view.Installer = demos.view.Appearance.extend({
 demos.InstallerRouter = Backbone.Router.extend({
 
 	routes: {
-		'themes.php?page=demo-importer&browse=uploads&demo=:slug': 'demo',
-		'themes.php?page=demo-importer&browse=:sort&search=:query': 'search',
-		'themes.php?page=demo-importer&browse=:sort&s=:query': 'search',
-		'themes.php?page=demo-importer&browse=welcome': 'sort',
-		'themes.php?page=demo-importer&browse=:sort': 'demos',
+		'themes.php?page=demo-importer&demo=:slug': 'demo',
+		'themes.php?page=demo-importer&browse=:sort': 'sort',
+		'themes.php?page=demo-importer&search=:query': 'search',
+		'themes.php?page=demo-importer&s=:query': 'search',
 		'themes.php?page=demo-importer': 'sort'
 	},
 
-	browse: function() {
-		return demos.isPreview ? 'preview' : 'uploads';
-	},
-
 	baseUrl: function( url ) {
-		return 'themes.php?page=demo-importer&browse=' + this.browse() + url;
+		return 'themes.php?page=demo-importer' + url;
 	},
 
 	demoPath: '&demo=',
+	browsePath: '&browse=',
 	searchPath: '&search=',
 
-	search: function( sort, query ) {
+	search: function( query ) {
 		$( '.wp-filter-search' ).val( query );
-	},
-
-	demos: function() {
-		$( '.wp-filter-search' ).val( '' );
 	},
 
 	navigate: function() {
@@ -1135,13 +1402,11 @@ demos.InstallerRouter = Backbone.Router.extend({
 demos.RunInstaller = {
 
 	init: function() {
-		// Initializes the blog's demo library view
-		// Create a new collection with data
-		this.demos = new demos.Collection( demos.data.demos );
-
 		// Set up the view
+		// Passes the default 'section' as an option
 		this.view = new demos.view.Installer({
-			collection: this.demos
+			section: 'welcome',
+			SearchView: demos.view.InstallerSearch
 		});
 
 		this.render();
@@ -1181,9 +1446,11 @@ demos.RunInstaller = {
 		// Also handles the root URL triggering a sort request
 		// for `welcome`, the default view
 		demos.router.on( 'route:sort', function( sort ) {
-			if ( ! sort || 'welcome' === sort ) {
-				$( '.wp-filter-search' ).hide();
+			if ( ! sort ) {
+				sort = 'welcome';
 			}
+			self.view.sort( sort );
+			self.view.trigger( 'demo:close' );
 		});
 
 		// The `search` route event. The router populates the input field.
