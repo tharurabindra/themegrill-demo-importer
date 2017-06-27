@@ -5,4 +5,5 @@ composer.* export-ignore
 Gruntfile.js export-ignore
 package.json export-ignore
 phpcs.ruleset.xml export-ignore
+dev.ruleset.xml export-ignore
 README.md export-ignore

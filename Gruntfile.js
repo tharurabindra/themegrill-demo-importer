@@ -122,15 +122,20 @@ module.exports = function( grunt ){
 
 		// Generate POT files.
 		makepot: {
+			options: {
+				type: 'wp-plugin',
+				domainPath: 'languages',
+				potHeaders: {
+					'report-msgid-bugs-to': 'themegrill@gmail.com',
+					'language-team': 'LANGUAGE <EMAIL@ADDRESS>'
+				}
+			},
 			dist: {
 				options: {
-					type: 'wp-plugin',
-					domainPath: 'languages',
 					potFilename: 'themegrill-demo-importer.pot',
-					potHeaders: {
-						'report-msgid-bugs-to': 'themegrill@gmail.com',
-						'language-team': 'LANGUAGE <EMAIL@ADDRESS>'
-					}
+					exclude: [
+						'vendor/.*'
+					]
 				}
 			}
 		},
@@ -187,7 +192,7 @@ module.exports = function( grunt ){
 		phpcs: {
 			options: {
 				bin: 'vendor/bin/phpcs',
-				standard: './phpcs.ruleset.xml'
+				standard: './dev.ruleset.xml'
 			},
 			dist: {
 				src:  [
@@ -238,6 +243,7 @@ module.exports = function( grunt ){
 					'!composer.json',
 					'!composer.lock',
 					'!node_modules/**',
+					'!dev.ruleset.xml',
 					'!phpcs.ruleset.xml'
 				],
 				dest: 'themegrill-demo-importer',

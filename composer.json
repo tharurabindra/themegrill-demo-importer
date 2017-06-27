@@ -10,14 +10,22 @@
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
     "wp-coding-standards/wpcs": "*",
-    "simplyadmire/composer-plugins" : "@dev"
+    "shivapoudel/wordpress-git-hooks": "@dev"
   },
   "scripts": {
+    "pre-update-cmd": [
+      "WordPress\\GitHooks\\Hooks::preHooks"
+    ],
+    "pre-install-cmd": [
+      "WordPress\\GitHooks\\Hooks::preHooks"
+    ],
     "post-install-cmd": [
-      "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs"
+      "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs",
+      "WordPress\\GitHooks\\Hooks::postHooks"
     ],
     "post-update-cmd": [
-      "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs"
+      "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs",
+      "WordPress\\GitHooks\\Hooks::postHooks"
     ]
   }
 }

@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc8868b0f068d03c4a1ea5221933732b",
-    "content-hash": "e902d62f93fd8f9f14910ae4a1e8a26f",
+    "hash": "f22ba5d9c11b7fe8890ff080e2a5a501",
+    "content-hash": "52d53e90e0b80396c733336056cac161",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "d78064c68299743e0161004f2de3a0204e33b804"
+                "reference": "79ad876c7498c0bbfe7eed065b8651c93bfd6045"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/d78064c68299743e0161004f2de3a0204e33b804",
-                "reference": "d78064c68299743e0161004f2de3a0204e33b804",
+                "url": "https://api.github.com/repos/composer/installers/zipball/79ad876c7498c0bbfe7eed065b8651c93bfd6045",
+                "reference": "79ad876c7498c0bbfe7eed065b8651c93bfd6045",
                 "shasum": ""
             },
             "require": {
@@ -60,12 +60,16 @@
             "keywords": [
                 "Craft",
                 "Dolibarr",
+                "Eliasis",
                 "Hurad",
                 "ImageCMS",
+                "Kanboard",
                 "MODX Evo",
                 "Mautic",
+                "Maya",
                 "OXID",
                 "Plentymarkets",
+                "Porto",
                 "RadPHP",
                 "SMF",
                 "Thelia",
@@ -88,9 +92,11 @@
                 "fuelphp",
                 "grav",
                 "installer",
+                "itop",
                 "joomla",
                 "kohana",
                 "laravel",
+                "lavalite",
                 "lithium",
                 "magento",
                 "mako",
@@ -105,6 +111,7 @@
                 "roundcube",
                 "shopware",
                 "silverstripe",
+                "sydes",
                 "symfony",
                 "typo3",
                 "wordpress",
@@ -112,74 +119,55 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2016-08-13 20:53:52"
+            "time": "2017-04-24 06:37:16"
         }
     ],
     "packages-dev": [
         {
-            "name": "simplyadmire/composer-plugins",
+            "name": "shivapoudel/wordpress-git-hooks",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/SimplyAdmire/ComposerPlugins.git",
-                "reference": "d8380f670694c1c2330b22591ca74adc82cffe19"
+                "url": "https://github.com/shivapoudel/wordpress-git-hooks.git",
+                "reference": "613509ddf6c256eb9ccf5dff065d0ac9dd32fc48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SimplyAdmire/ComposerPlugins/zipball/d8380f670694c1c2330b22591ca74adc82cffe19",
-                "reference": "d8380f670694c1c2330b22591ca74adc82cffe19",
+                "url": "https://api.github.com/repos/shivapoudel/wordpress-git-hooks/zipball/613509ddf6c256eb9ccf5dff065d0ac9dd32fc48",
+                "reference": "613509ddf6c256eb9ccf5dff065d0ac9dd32fc48",
                 "shasum": ""
             },
-            "require": {
-                "composer-plugin-api": "^1.0",
-                "squizlabs/php_codesniffer": "*"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": [
-                    "SimplyAdmire\\ComposerPlugins\\PhpCodesnifferStandardInstallerPlugin"
-                ]
-            },
+            "type": "scripts",
             "autoload": {
-                "psr-0": {
-                    "SimplyAdmire\\ComposerPlugins": ""
+                "psr-4": {
+                    "WordPress\\GitHooks\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-3.0+"
+                "MIT"
             ],
             "authors": [
                 {
-                    "name": "Rens Admiraal",
-                    "email": "rens@simplyadmire.com",
-                    "role": "lead"
+                    "name": "Shiva Poudel",
+                    "email": "dev.shivapoudel@gmail.com"
                 }
             ],
-            "description": "Composer plugin for installing PHP_CodeSniffer standards",
-            "keywords": [
-                "PHP_CodeSniffer",
-                "TYPO3 CMS",
-                "TYPO3 Flow",
-                "TYPO3 Neos",
-                "phpcs",
-                "standards",
-                "typo3"
-            ],
-            "time": "2016-05-12 11:58:38"
+            "description": "WordPress Git Hooks",
+            "time": "2017-06-27 16:21:17"
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.7.0",
+            "version": "2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "571e27b6348e5b3a637b2abc82ac0d01e6d7bbed"
+                "reference": "dcbed1074f8244661eecddfc2a675430d8d33f62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/571e27b6348e5b3a637b2abc82ac0d01e6d7bbed",
-                "reference": "571e27b6348e5b3a637b2abc82ac0d01e6d7bbed",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/dcbed1074f8244661eecddfc2a675430d8d33f62",
+                "reference": "dcbed1074f8244661eecddfc2a675430d8d33f62",
                 "shasum": ""
             },
             "require": {
@@ -244,24 +232,24 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-09-01 23:53:02"
+            "time": "2017-05-22 02:43:20"
         },
         {
             "name": "wp-coding-standards/wpcs",
-            "version": "0.10.0",
+            "version": "0.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git",
-                "reference": "b39490465f6fd7375743a395019cd597e12119c9"
+                "reference": "407e4b85f547a5251185f89ceae6599917343388"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress-Coding-Standards/WordPress-Coding-Standards/zipball/b39490465f6fd7375743a395019cd597e12119c9",
-                "reference": "b39490465f6fd7375743a395019cd597e12119c9",
+                "url": "https://api.github.com/repos/WordPress-Coding-Standards/WordPress-Coding-Standards/zipball/407e4b85f547a5251185f89ceae6599917343388",
+                "reference": "407e4b85f547a5251185f89ceae6599917343388",
                 "shasum": ""
             },
             "require": {
-                "squizlabs/php_codesniffer": "^2.6"
+                "squizlabs/php_codesniffer": "^2.8.1"
             },
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
@@ -280,13 +268,13 @@
                 "standards",
                 "wordpress"
             ],
-            "time": "2016-08-29 20:04:47"
+            "time": "2017-03-20 23:17:58"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "simplyadmire/composer-plugins": 20
+        "shivapoudel/wordpress-git-hooks": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
