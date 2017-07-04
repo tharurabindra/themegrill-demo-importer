@@ -213,7 +213,7 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 										<# if ( plugin.is_active ) { #>
 											<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>
 										<# } else { #>
-											<mark class="error"><span class="dashicons dashicons-no-alt"></span></mark>
+											<a class="button button-primary hide-if-no-js plugin-install" href="#" data-name="{{ plugin.name }}" data-slug="{{ slug }}" aria-label="<?php echo $aria_label; ?>"><?php _e( 'Install', 'themegrill-demo-importer' ); ?></a>
 										<# } #>
 									</td>
 								</tr>
@@ -224,11 +224,6 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 							</tr>
 						<# } #>
 					</tbody>
-					<tfoot>
-						<tr>
-							<th class="plugin-required" colspan="3"><a href="#" class="button button-primary plugin-install"><?php _e( 'Install all Required plugins', 'themegrill-demo-importer' ); ?></a></th>
-						</tr>
-					</tfoot>
 				</table>
 
 				<# if ( data.tags ) { #>

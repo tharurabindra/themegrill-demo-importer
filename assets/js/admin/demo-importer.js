@@ -532,8 +532,7 @@ demos.view.Details = wp.Backbone.View.extend({
 	},
 
 	installPlugin: function( event ) {
-		var $button = $( event.target ),
-			pluginName = $( this ).data( 'name' );
+		var $button = $( event.target );
 
 		event.preventDefault();
 
@@ -548,16 +547,14 @@ demos.view.Details = wp.Backbone.View.extend({
 
 				$button
 					.removeClass( 'updating-message' )
-					.text( wp.updates.l10n.installNow )
-					.attr( 'aria-label', wp.updates.l10n.installNowLabel.replace( '%s', 'Toolkit' ) );
+					.text( wp.updates.l10n.installNow );
 
 				wp.a11y.speak( wp.updates.l10n.updateCancel, 'polite' );
 			} );
 		}
 
 		wp.updates.installPlugin( {
-			slug:    $button.data( 'slug' ),
-			pagenow: pagenow
+			slug: $button.data( 'slug' )
 		} );
 	},
 
