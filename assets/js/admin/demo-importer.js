@@ -1,4 +1,4 @@
-/* global demoImporterLocalizeScript */
+/* global pagenow, demoImporterLocalizeScript */
 window.wp = window.wp || {};
 
 ( function( $ ) {
@@ -376,7 +376,8 @@ demos.view.Details = wp.Backbone.View.extend({
 		'click .delete-demo': 'deleteDemo',
 		'click .left': 'previousDemo',
 		'click .right': 'nextDemo',
-		'click .demo-import': 'importDemo'
+		'click .demo-import': 'importDemo',
+		'click .plugin-install': 'installPlugin'
 	},
 
 	// The HTML template for the theme overlay
@@ -527,6 +528,36 @@ demos.view.Details = wp.Backbone.View.extend({
 
 		wp.updates.importDemo( {
 			slug: $target.data( 'slug' )
+		} );
+	},
+
+	installPlugin: function( event ) {
+		var $button = $( event.target ),
+			pluginName = $( this ).data( 'name' );
+
+		event.preventDefault();
+
+		if ( $button.hasClass( 'updating-message' ) || $button.hasClass( 'button-disabled' ) ) {
+			return;
+		}
+
+		if ( wp.updates.shouldRequestFilesystemCredentials && ! wp.updates.ajaxLocked ) {
+			wp.updates.requestFilesystemCredentials( event );
+
+			$( document ).on( 'credential-modal-cancel', function() {
+
+				$button
+					.removeClass( 'updating-message' )
+					.text( wp.updates.l10n.installNow )
+					.attr( 'aria-label', wp.updates.l10n.installNowLabel.replace( '%s', 'Toolkit' ) );
+
+				wp.a11y.speak( wp.updates.l10n.updateCancel, 'polite' );
+			} );
+		}
+
+		wp.updates.installPlugin( {
+			slug:    $button.data( 'slug' ),
+			pagenow: pagenow
 		} );
 	},
 
