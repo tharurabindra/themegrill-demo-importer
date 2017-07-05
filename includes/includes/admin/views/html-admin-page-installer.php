@@ -234,7 +234,7 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 					</tbody>
 					<tfoot>
 						<tr>
-							<th class="plugin-required" colspan="4"><a href="#" class="button button-primary plugin-install"><?php _e( 'Install & activate plugins', 'themegrill-demo-importer' ); ?></a></th>
+							<th class="plugin-installer" colspan="4"><a href="#" class="button button-primary plugin-install"><?php _e( 'Install & activate plugins', 'themegrill-demo-importer' ); ?></a></th>
 						</tr>
 					</tfoot>
 				</table>
