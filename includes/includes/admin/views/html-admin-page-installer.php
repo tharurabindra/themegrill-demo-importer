@@ -199,14 +199,20 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 						<# if ( ! _.isEmpty( data.plugins ) ) { #>
 							<# _.each( data.plugins, function( plugin, slug ) { #>
 								<# var checkboxIdPrefix = _.uniqueId( 'checkbox_' ) #>
-								<tr class="plugin" data-slug="{{ slug }}" data-plugin="{{ plugin.slug }}">
+								<tr class="plugin<# if ( plugin.required ) { #> wp-locked<# } #>" data-slug="{{ slug }}" data-plugin="{{ plugin.slug }}">
 									<th scope="row" class="check-column">
 										<label class="screen-reader-text" for="{{ checkboxIdPrefix }}"><?php printf( __( 'Select %s', 'themegrill-demo-importer' ), '{{ plugin.name }}' ); ?></label>
-										<# if ( plugin.required ) { #>
-											<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}" disabled="disabled" checked="true">
-										<# } else { #>
-											<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}">
-										<# } #>
+										<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}">
+										<div class="locked-indicator">
+											<span class="locked-indicator-icon" aria-hidden="true"></span>
+											<span class="screen-reader-text"><?php
+											printf(
+												/* translators: %s: plugin name */
+												__( '&#8220;%s&#8221; is required' ),
+												'{{ plugin.name }}'
+											);
+											?></span>
+										</div>
 									</th>
 									<td class="plugin-name">
 										<# if ( plugin.link ) { #>
