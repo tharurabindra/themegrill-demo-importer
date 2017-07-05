@@ -198,13 +198,10 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 					<tbody id="the-list">
 						<# if ( ! _.isEmpty( data.plugins ) ) { #>
 							<# _.each( data.plugins, function( plugin, slug ) { #>
-								<# var checkboxIdPrefix = 'checkbox_' + String( Math.random() ).replace( /\D/g, '' ) #>
+								<# var checkboxIdPrefix = 'checkbox_' + String( Math.random() ).replace( /\D/g, '' )
+								var pluginRequired   = plugin.required ? 'check-column-required' : 'check-column' #>
 								<tr class="plugin" data-slug="{{ slug }}" data-plugin="{{ plugin.slug }}">
-									<# if ( plugin.required ) { #>
-									<th scope="row" class="check-column-required">
-									<# } else { #>
-									<th scope="row" class="check-column">
-									<# } #>
+									<th scope="row" class="{{ pluginRequired }}">
 										<label class="screen-reader-text" for="{{ checkboxIdPrefix }}"><?php printf( __( 'Select %s', 'themegrill-demo-importer' ), '{{ plugin.name }}' ); ?></label>
 										<# if ( plugin.required ) { #>
 											<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}" data-wp-toggle="0" disabled="disabled" checked="true">
