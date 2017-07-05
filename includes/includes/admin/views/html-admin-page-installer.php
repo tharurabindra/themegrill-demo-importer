@@ -198,10 +198,11 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 					<tbody>
 						<# if ( ! _.isEmpty( data.plugins ) ) { #>
 							<# _.each( data.plugins, function( plugin, slug ) { #>
+								<# var checkboxIdPrefix = 'checkbox_' + String( Math.random() ).replace( /\D/g, '' ) #>
 								<tr class="plugin" data-slug="{{ slug }}" data-plugin="{{ plugin.slug }}">
 									<th scope="row" class="check-column">
-										<label class="screen-reader-text" for="checkbox_b2a77cb7afefcfe24ee09da469450cf3"><?php printf( __( 'Select %s', 'themegrill-demo-importer' ), '{{ plugin.name }}' ); ?></label>
-										<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="checkbox_b2a77cb7afefcfe24ee09da469450cf3">
+										<label class="screen-reader-text" for="{{ checkboxIdPrefix }}"><?php printf( __( 'Select %s', 'themegrill-demo-importer' ), '{{ plugin.name }}' ); ?></label>
+										<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}">
 									</th>
 									<td class="plugin-name">
 										<# if ( plugin.link ) { #>
