@@ -186,7 +186,7 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 				<table class="plugins-list-table widefat">
 					<thead>
 						<tr>
-							<td id="cb" class="manage-column column-cb check-column">
+							<td id="cb" class="check-column check-column-required">
 								<label class="screen-reader-text" for="cb-select-all-1"><?php esc_html_e( 'Select All', 'themegrill-demo-importer' ); ?></label>
 								<input id="cb-select-all-1" type="checkbox">
 							</td>
@@ -200,9 +200,17 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 							<# _.each( data.plugins, function( plugin, slug ) { #>
 								<# var checkboxIdPrefix = 'checkbox_' + String( Math.random() ).replace( /\D/g, '' ) #>
 								<tr class="plugin" data-slug="{{ slug }}" data-plugin="{{ plugin.slug }}">
+									<# if ( plugin.required ) { #>
+									<th scope="row" class="check-column-required">
+									<# } else { #>
 									<th scope="row" class="check-column">
+									<# } #>
 										<label class="screen-reader-text" for="{{ checkboxIdPrefix }}"><?php printf( __( 'Select %s', 'themegrill-demo-importer' ), '{{ plugin.name }}' ); ?></label>
-										<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}">
+										<# if ( plugin.required ) { #>
+											<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}" data-wp-toggle="0" disabled="disabled" checked="true">
+										<# } else { #>
+											<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}">
+										<# } #>
 									</th>
 									<td class="plugin-name">
 										<# if ( plugin.link ) { #>
