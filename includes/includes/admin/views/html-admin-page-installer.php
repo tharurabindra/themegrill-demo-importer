@@ -187,7 +187,7 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 					<thead>
 						<tr>
 							<td id="cb" class="manage-column column-cb check-column">
-								<label class="screen-reader-text" for="cb-select-all-1">Select All</label>
+								<label class="screen-reader-text" for="cb-select-all-1"><?php esc_html_e( 'Select All', 'themegrill-demo-importer' ); ?></label>
 								<input id="cb-select-all-1" type="checkbox">
 							</td>
 							<th class="plugin-name"><?php esc_html_e( 'Plugin Name', 'themegrill-demo-importer' ); ?></th>
@@ -199,12 +199,15 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 						<# if ( ! _.isEmpty( data.plugins ) ) { #>
 							<# _.each( data.plugins, function( plugin, slug ) { #>
 								<tr>
-									<th scope="row" class="check-column"><label class="screen-reader-text" for="checkbox_b2a77cb7afefcfe24ee09da469450cf3">Select Akismet Anti-Spam</label><input type="checkbox" name="checked[]" value="akismet/akismet.php" id="checkbox_b2a77cb7afefcfe24ee09da469450cf3"></th>
+									<th scope="row" class="check-column">
+										<label class="screen-reader-text" for="checkbox_b2a77cb7afefcfe24ee09da469450cf3"><?php printf( __( 'Select %s', 'themegrill-demo-importer' ), '{{ plugin.name }}' ); ?></label>
+										<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="checkbox_b2a77cb7afefcfe24ee09da469450cf3">
+									</th>
 									<td class="plugin-name">
 										<# if ( plugin.link ) { #>
 											<a href="{{{ plugin.link }}}" target="_blank">{{{ plugin.name }}}</a>
 										<# } else { #>
-											<a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=' ) ); ?>{{ slug }}" target="_blank">{{ plugin.name }}</a>
+											<a href="<?php printf( esc_url( 'https://wordpress.org/plugins/%s' ), '{{ slug }}' ); ?>" target="_blank">{{ plugin.name }}</a>
 										<# } #>
 									</td>
 									<td class="plugin-type">
