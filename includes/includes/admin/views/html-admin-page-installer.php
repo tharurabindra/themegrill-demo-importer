@@ -190,12 +190,12 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 								<label class="screen-reader-text" for="cb-select-all-1"><?php esc_html_e( 'Select All', 'themegrill-demo-importer' ); ?></label>
 								<input id="cb-select-all-1" type="checkbox">
 							</td>
-							<th class="plugin-name"><?php esc_html_e( 'Plugin Name', 'themegrill-demo-importer' ); ?></th>
-							<th class="plugin-type"><?php esc_html_e( 'Type', 'themegrill-demo-importer' ); ?></th>
-							<th class="plugin-status"><?php esc_html_e( 'Status', 'themegrill-demo-importer' ); ?></th>
+							<th scope="col" class="plugin-name"><?php esc_html_e( 'Plugin Name', 'themegrill-demo-importer' ); ?></th>
+							<th scope="col" class="plugin-type"><?php esc_html_e( 'Type', 'themegrill-demo-importer' ); ?></th>
+							<th scope="col" class="plugin-status"><?php esc_html_e( 'Status', 'themegrill-demo-importer' ); ?></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="the-list">
 						<# if ( ! _.isEmpty( data.plugins ) ) { #>
 							<# _.each( data.plugins, function( plugin, slug ) { #>
 								<# var checkboxIdPrefix = 'checkbox_' + String( Math.random() ).replace( /\D/g, '' ) #>
