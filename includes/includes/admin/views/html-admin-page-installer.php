@@ -186,6 +186,10 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 				<table class="plugins-list-table widefat">
 					<thead>
 						<tr>
+							<td id="cb" class="manage-column column-cb check-column">
+								<label class="screen-reader-text" for="cb-select-all-1">Select All</label>
+								<input id="cb-select-all-1" type="checkbox">
+							</td>
 							<th class="plugin-name"><?php esc_html_e( 'Plugin Name', 'themegrill-demo-importer' ); ?></th>
 							<th class="plugin-type"><?php esc_html_e( 'Type', 'themegrill-demo-importer' ); ?></th>
 							<th class="plugin-status"><?php esc_html_e( 'Status', 'themegrill-demo-importer' ); ?></th>
@@ -195,6 +199,7 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 						<# if ( ! _.isEmpty( data.plugins ) ) { #>
 							<# _.each( data.plugins, function( plugin, slug ) { #>
 								<tr>
+									<th scope="row" class="check-column"><label class="screen-reader-text" for="checkbox_b2a77cb7afefcfe24ee09da469450cf3">Select Akismet Anti-Spam</label><input type="checkbox" name="checked[]" value="akismet/akismet.php" id="checkbox_b2a77cb7afefcfe24ee09da469450cf3"></th>
 									<td class="plugin-name">
 										<# if ( plugin.link ) { #>
 											<a href="{{{ plugin.link }}}" target="_blank">{{{ plugin.name }}}</a>
@@ -213,17 +218,22 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 										<# if ( plugin.is_active ) { #>
 											<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>
 										<# } else { #>
-											<a class="button button-primary hide-if-no-js plugin-install" href="#" data-name="{{ plugin.name }}" data-slug="{{ slug }}" aria-label="<?php echo $aria_label; ?>"><?php _e( 'Install', 'themegrill-demo-importer' ); ?></a>
+											<mark class="error"><span class="dashicons dashicons-no-alt"></span></mark>
 										<# } #>
 									</td>
 								</tr>
 							<# }); #>
 						<# } else { #>
 							<tr>
-								<td class="plugins-list-table-blank-state" colspan="3"><p><?php _e( 'No plugins are needed to import this demo.', 'themegrill-demo-importer' ); ?></p></td>
+								<td class="plugins-list-table-blank-state" colspan="4"><p><?php _e( 'No plugins are needed to import this demo.', 'themegrill-demo-importer' ); ?></p></td>
 							</tr>
 						<# } #>
 					</tbody>
+					<tfoot>
+						<tr>
+							<th class="plugin-required" colspan="4"><a href="#" class="button button-primary plugin-install"><?php _e( 'Install & activate plugins', 'themegrill-demo-importer' ); ?></a></th>
+						</tr>
+					</tfoot>
 				</table>
 
 				<# if ( data.tags ) { #>

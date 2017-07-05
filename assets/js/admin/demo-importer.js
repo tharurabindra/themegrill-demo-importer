@@ -1,4 +1,4 @@
-/* global pagenow, demoImporterLocalizeScript */
+/* global demoImporterLocalizeScript */
 window.wp = window.wp || {};
 
 ( function( $ ) {
