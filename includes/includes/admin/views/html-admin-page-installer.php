@@ -208,7 +208,7 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 											<span class="screen-reader-text"><?php
 											printf(
 												/* translators: %s: plugin name */
-												__( '&#8220;%s&#8221; is required' ),
+												__( '&#8220;%s&#8221; is required', 'themegrill-demo-importer' ),
 												'{{ plugin.name }}'
 											);
 											?></span>
