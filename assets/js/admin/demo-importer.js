@@ -553,9 +553,29 @@ demos.view.Details = wp.Backbone.View.extend({
 			} );
 		}
 
-		wp.updates.installPlugin( {
-			slug: $button.data( 'slug' )
-		} );
+		var required_plugins_data    = [];
+		var recommended_plugins_data = [];
+
+		$.each( $( '.plugins-list-table .demo-impoter-plugin-list' ),function function_name(argument) {
+
+			if($(this).attr('data-required')!=='undefined' && $(this).attr('data-required')=='true'){
+
+
+				required_plugins_data.push($(this).attr('data-value'));
+
+			}else if($(this).prop('checked')===true){
+
+				recommended_plugins_data.push($(this).attr('data-value'));
+			}
+		});
+
+
+
+
+
+		// wp.updates.installPlugin( {
+		// 	slug: $button.data( 'slug' )
+		// } );
 	},
 
 	deleteDemo: function( event ) {

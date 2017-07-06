@@ -202,7 +202,13 @@ $demo_filter_links = apply_filters( 'themegrill_demo_importer_filter_links_array
 								<tr class="plugin<# if ( plugin.required ) { #> wp-locked<# } #>" data-slug="{{ slug }}" data-plugin="{{ plugin.slug }}">
 									<th scope="row" class="check-column">
 										<label class="screen-reader-text" for="{{ checkboxIdPrefix }}"><?php printf( __( 'Select %s', 'themegrill-demo-importer' ), '{{ plugin.name }}' ); ?></label>
-										<input type="checkbox" name="checked[]" value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}">
+
+
+										<# if ( plugin.required ) { #>
+										<input type="checkbox" name="checked[]" data-required="true" data-value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}" class="demo-impoter-plugin-list">
+										<# } else { #>
+										<input type="checkbox" name="checked[]" data-required="false" data-value="{{ plugin.slug }}" id="{{ checkboxIdPrefix }}" class="demo-impoter-plugin-list">
+										<# } #>
 										<div class="locked-indicator">
 											<span class="locked-indicator-icon" aria-hidden="true"></span>
 											<span class="screen-reader-text"><?php
