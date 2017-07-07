@@ -111,10 +111,6 @@ table.plugins-list-table {
 	th {
 		padding: 9px;
 		font-weight: 600;
-
-		&.check-column-required {
-			padding: 11px 0 0 3px;
-		}
 	}
 
 	td {
@@ -142,7 +138,8 @@ table.plugins-list-table {
 		text-align: center;
 	}
 
-	.plugin-install {
+	.plugin-install,
+	.plugin-activator {
 		float: right;
 	}
 }
