@@ -553,8 +553,12 @@ demos.view.Details = wp.Backbone.View.extend({
 			} );
 		}
 
-		wp.updates.installPlugin( {
-			slug: $button.data( 'slug' )
+		var plugins_checked = $( 'input[name="checked[]"]:checked' ).map(function(){
+			return $(this).val();
+		} ).get();
+
+		wp.updates.installPlugins( {
+			plugins: plugins_checked
 		} );
 	},
 

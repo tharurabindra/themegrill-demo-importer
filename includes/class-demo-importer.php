@@ -65,6 +65,7 @@ class TG_Demo_Importer {
 
 		// AJAX Events to import demo and update rating footer.
 		add_action( 'wp_ajax_import-demo', array( $this, 'ajax_import_demo' ) );
+		add_action( 'wp_ajax_install-plugins', array( $this, 'ajax_install_plugins' ) );
 		add_action( 'wp_ajax_footer-text-rated', array( $this, 'ajax_footer_text_rated' ) );
 
 		// Update custom nav menu items and siteorigin panel data.
@@ -642,6 +643,12 @@ class TG_Demo_Importer {
 		if ( $result || is_wp_error( $result ) ) {
 			$file_upload->cleanup();
 		}
+	}
+
+	public function ajax_install_plugins() {
+		check_ajax_referer( 'updates' );
+
+		wp_send_json_success( $_POST['plugins'] );
 	}
 
 	/**

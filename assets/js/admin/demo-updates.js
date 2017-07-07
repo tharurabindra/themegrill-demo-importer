@@ -58,6 +58,22 @@
 	};
 
 	/**
+	 * Sends an Ajax request to the server to install a plugin.
+	 *
+	 * @since 4.6.0
+	 *
+	 * @param {object}                args         Arguments.
+	 * @param {string}                args.slug    Plugin identifier in the WordPress.org Plugin repository.
+	 * @param {installPluginSuccess=} args.success Optional. Success callback. Default: wp.updates.installPluginSuccess
+	 * @param {installPluginError=}   args.error   Optional. Error callback. Default: wp.updates.installPluginError
+	 * @return {$.promise} A jQuery promise that represents the request,
+	 *                     decorated with an abort() method.
+	 */
+	wp.updates.installPlugins = function( args ) {
+		return wp.updates.ajax( 'install-plugins', args );
+	};
+
+	/**
 	 * Sends an Ajax request to the server to import a demo.
 	 *
 	 * @param {object}             args
@@ -329,6 +345,10 @@
 
 			case 'delete-demo':
 				wp.updates.deleteDemo( job.data );
+				break;
+
+			case 'install-plugins':
+				wp.updates.installPlugins( job.data );
 				break;
 
 			default:
